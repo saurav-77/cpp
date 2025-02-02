@@ -1,0 +1,2 @@
+-DLOCAL
+-std=c++23
