@@ -13,8 +13,6 @@ using ush = uint16_t;
 const ll MOD = 1e9 + 7;
 const ll OMOD = 998'244'353;
 
-
-
 void solve() {
     
 }
