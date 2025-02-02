@@ -8,8 +8,6 @@
     auto duration = duration_cast<milliseconds>(stop_time - start_time);                                     \
     writer_out << "[Time Taken" << " = " << duration << "]" << endl << endl;
 
-#ifndef DEBUG_TEMPLATE_CPP
-#define DEBUG_TEMPLATE_CPP
 namespace __DEBUG_UTIL__ {
 inline auto digit_to_char(int digit) { return static_cast<char>(digit > 9 ? 'a' + digit - 10 : '0' + digit); }
 
