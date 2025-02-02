@@ -134,16 +134,17 @@ template <typename Head, typename... Tail> void debug_out(const Head H, const Ta
     debug_out(T...);
 }
 
+void err_prefix(string func, int line) {
+    writer_out << "\033[0;31m\u001b[1mDEBUG\033[0m: "
+               << "\u001b[34m" << func << "\033[0m"
+               << ":"
+               << "\u001b[34m" << line << "\033[0m: ";
+}
+#ifdef CDEBUG
 #define clg(...)                                                                                             \
-    writer_out << "\033[0;31m\u001b[1mDEBUG\033[0m: ";                                                       \
-    writer_out << __func__ << ":" << __LINE__ << ": " << "[" << #__VA_ARGS__ << "]: [",                     \
+    err_prefix(__FUNCTION__, __LINE__), writer_out << "[" << #__VA_ARGS__ << "] = [", debug_out(__VA_ARGS__)
+#else
+#define clg(...)                                                                                             \
+    writer_out << __func__ << ":" << __LINE__ << ": " << "[" << #__VA_ARGS__ << "] = [",                     \
         debug_out(__VA_ARGS__)
-
-#define start                                                                                                \
-    using namespace chrono;                                                                                  \
-    auto start_time = high_resolution_clock::now();
-
-#define stop                                                                                                 \
-    auto stop_time = high_resolution_clock::now();                                                           \
-    auto duration = duration_cast<milliseconds>(stop_time - start_time);                                     \
-    cerr << "[Time Taken" << " = " << duration << "]" << endl << endl;
+#endif

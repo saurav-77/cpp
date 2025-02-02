@@ -361,7 +361,6 @@ template <typename T = long long> vector<T> partition(T sum, T parts, T minRange
     return partition;
 }
 } // namespace test_case_generator
-
 inline namespace IO {
 #define SFINAE(x, ...)                                                                                       \
     template <class, class = void> struct x : std::false_type {};                                            \
@@ -389,7 +388,8 @@ template <auto &is> struct Reader {
 
 template <class... Ts> void re(Ts &...ts) { Reader<cin>{}.read(ts...); }
 
-template <auto &os, bool print_nd> struct Writer {
+template <auto &os, bool debug, bool print_nd> struct Writer {
+    string comma() const { return debug ? "," : ""; }
     template <class T> constexpr char Space(const T &) const {
         return print_nd && (Iterable<T>::value or IsTuple<T>::value) ? '\n' : ' ';
     }
@@ -397,20 +397,34 @@ template <auto &os, bool print_nd> struct Writer {
         if constexpr (DefaultO<T>::value)
             os << t;
         else if constexpr (Iterable<T>::value) {
+            if (debug)
+                os << '{';
             int i = 0;
             for (auto &&x : t)
-                ((i++) ? (os << Space(x), Impl(x)) : Impl(x));
+                ((i++) ? (os << comma() << Space(x), Impl(x)) : Impl(x));
+            if (debug)
+                os << '}';
         } else if constexpr (IsTuple<T>::value) {
+            if (debug)
+                os << '(';
             std::apply(
                 [this](auto const &...args) {
                     int i = 0;
-                    (((i++) ? (os << " ", Impl(args)) : Impl(args)), ...);
+                    (((i++) ? (os << comma() << " ", Impl(args)) : Impl(args)), ...);
                 },
                 t);
+            if (debug)
+                os << ')';
         } else
             static_assert(IsTuple<T>::value, "No matching type for print");
     }
-    template <class T> void ImplWrapper(T const &t) const { Impl(t); }
+    template <class T> void ImplWrapper(T const &t) const {
+        if (debug)
+            os << "\033[0;31m";
+        Impl(t);
+        if (debug)
+            os << "\033[0m";
+    }
     template <class... Ts> void print(Ts const &...ts) const { ((Impl(ts)), ...); }
     template <class F, class... Ts>
     void print_with_sep(const std::string &sep, F const &f, Ts const &...ts) const {
@@ -419,10 +433,34 @@ template <auto &os, bool print_nd> struct Writer {
     void print_with_sep(const std::string &) const { os << '\n'; }
 };
 
-template <class... Ts> void pr(Ts const &...ts) { Writer<cout, true>{}.print(ts...); }
-template <class... Ts> void ps(Ts const &...ts) { Writer<cout, true>{}.print_with_sep(" ", ts...); }
+template <class... Ts> void pr(Ts const &...ts) { Writer<cout, false, true>{}.print(ts...); }
+template <class... Ts> void ps(Ts const &...ts) { Writer<cout, false, true>{}.print_with_sep(" ", ts...); }
 } // namespace IO
 
+inline namespace Debug {
+template <typename... Args> void err(Args... args) {
+    Writer<cerr, true, false>{}.print_with_sep(" | ", args...);
+}
+template <typename... Args> void errn(Args... args) {
+    Writer<cerr, true, true>{}.print_with_sep(" | ", args...);
+}
+
+void err_prefix(string func, int line, string args) {
+    cerr << "\033[0;31m\u001b[1mDEBUG\033[0m"
+         << " | "
+         << "\u001b[34m" << func << "\033[0m"
+         << ":"
+         << "\u001b[34m" << line << "\033[0m"
+         << " - "
+         << "[" << args << "] = ";
+}
+
+#ifdef LOCAL
+#define clg(args...) err_prefix(__FUNCTION__, __LINE__, #args), err(args)
+#else
+#define clg(...)
+#endif
+} // namespace Debug
 void gen_test() {
     
 }

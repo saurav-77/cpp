@@ -1,2 +1,3 @@
 -DLOCAL
+-DCDEBUG
 -std=c++23
