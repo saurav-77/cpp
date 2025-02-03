@@ -1,4 +1,84 @@
 {
+    "inc__debug": {
+        "prefix": "inc__debug",
+        "body": [
+            "#if defined(LOCAL)",
+            "#include \"__debug.h\"",
+            "#else",
+            "#define clg(...)",
+            "#endif"
+        ]
+    },
+    "__debug_file": {
+        "prefix": "__debug_file",
+        "body": [
+            "#define Writer_out cerr",
+            "",
+            "inline namespace debug_print {",
+            "#define SFINAE(x, ...)\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   \\",
+            "\ttemplate <class, class = void> struct x : std::false_type {};\t\t\t\t\t\t\t\t\t\t\t\\",
+            "\ttemplate <class T> struct x<T, std::void_t<__VA_ARGS__>> : std::true_type {}",
+            "",
+            "SFINAE(DefaultI, decltype(std::cin >> std::declval<T &>()));",
+            "SFINAE(DefaultO, decltype(std::cout << std::declval<T &>()));",
+            "SFINAE(IsTuple, typename std::tuple_size<T>::type);",
+            "SFINAE(Iterable, decltype(std::begin(std::declval<T>())));",
+            "",
+            "template <auto &os, bool debug, bool print_nd> struct Printer {",
+            "\tstring comma() const { return debug ? \",\" : \"\"; }",
+            "\ttemplate <class T> constexpr char Space(const T &) const {",
+            "\t\treturn print_nd && (Iterable<T>::value or IsTuple<T>::value) ? '\\n' : ' ';",
+            "\t}",
+            "\ttemplate <class T> void Impl(T const &t) const {",
+            "\t\tif constexpr (DefaultO<T>::value)",
+            "\t\t\tos << t;",
+            "\t\telse if constexpr (Iterable<T>::value) {",
+            "\t\t\tif (debug)",
+            "\t\t\t\tos << '{';",
+            "\t\t\tint i = 0;",
+            "\t\t\tfor (auto &&x : t)",
+            "\t\t\t\t((i++) ? (os << comma() << Space(x), Impl(x)) : Impl(x));",
+            "\t\t\tif (debug)",
+            "\t\t\t\tos << '}';",
+            "\t\t} else if constexpr (IsTuple<T>::value) {",
+            "\t\t\tif (debug)",
+            "\t\t\t\tos << '(';",
+            "\t\t\tstd::apply(",
+            "\t\t\t\t[this](auto const &...args) {",
+            "\t\t\t\t\tint i = 0;",
+            "\t\t\t\t\t(((i++) ? (os << comma() << \" \", Impl(args)) : Impl(args)), ...);",
+            "\t\t\t\t},",
+            "\t\t\t\tt);",
+            "\t\t\tif (debug)",
+            "\t\t\t\tos << ')';",
+            "\t\t} else",
+            "\t\t\tstatic_assert(IsTuple<T>::value, \"No matching type for print\");",
+            "\t}",
+            "\ttemplate <class T> void ImplWrapper(T const &t) const { Impl(t); }",
+            "\ttemplate <class... Ts> void print(Ts const &...ts) const { ((Impl(ts)), ...); }",
+            "\ttemplate <class F, class... Ts>",
+            "\tvoid print_with_sep(const std::string &sep, F const &f, Ts const &...ts) const {",
+            "\t\tImplWrapper(f), ((os << sep, ImplWrapper(ts)), ...), os << '\\n';",
+            "\t}",
+            "\tvoid print_with_sep(const std::string &) const { os << '\\n'; }",
+            "};",
+            "",
+            "} // namespace debug_print",
+            "",
+            "template <typename... Args> void printerr(Args... args) {",
+            "\tPrinter<Writer_out, true, false>{}.print_with_sep(\" | \", args...);",
+            "}",
+            "template <typename... Args> void printerrn(Args... args) {",
+            "\tPrinter<Writer_out, true, true>{}.print_with_sep(\" | \", args...);",
+            "}",
+            "",
+            "void err_prefix(string func, int line, string args) {",
+            "\tWriter_out << func << \":\" << line << \": \"",
+            "\t\t\t   << \"[\" << args << \"] = \";",
+            "}",
+            "#define clg(args...) err_prefix(__FUNCTION__, __LINE__, #args), printerr(args)"
+        ]
+    },
     "debug": {
         "prefix": "debug",
         "body": [
@@ -367,6 +447,7 @@
             "#ifdef CDEBUG",
             "\tfreopen(\"input.txt\", \"r\", stdin);",
             "\tfreopen(\"output.txt\", \"w\", stdout);",
+            "\t// freopen(\"error.txt\", \"w\", stderr);",
             "#endif"
         ]
     },
@@ -1192,8 +1273,8 @@
             ""
         ]
     },
-    "simpleprps": {
-        "prefix": "simpleprps",
+    "prps_simple": {
+        "prefix": "prps_simple",
         "body": [
             "void ps() { cout << \"\\n\"; }",
             "template <class H, class... T> void ps(const H &h, const T &...t) {",
