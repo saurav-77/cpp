@@ -1,6 +1,6 @@
 {
-    "inc__debug": {
-        "prefix": "inc__debug",
+    "inc__debug_prps_file": {
+        "prefix": "inc__debug__prps_file",
         "body": [
             "#if defined(LOCAL)",
             "#include \"__debug.h\"",
@@ -9,8 +9,8 @@
             "#endif"
         ]
     },
-    "__debug_file": {
-        "prefix": "__debug_file",
+    "__debug_prps_file": {
+        "prefix": "__debug__prps_file",
         "body": [
             "#define Writer_out cerr",
             "",
@@ -266,7 +266,7 @@
             "}",
             "/* Primitive Datatypes Print */",
             "void print(const char *x) { writer_out << x; }",
-            "void print(bool x) { writer_out << (x ? \"T\" : \"F\"); }",
+            "void print(bool x) { writer_out << (x ? \"True\" : \"False\"); }",
             "void print(char x) { writer_out << '\\'' << x << '\\''; }",
             "void print(signed short int x) { writer_out << x; }",
             "void print(unsigned short int x) { writer_out << x; }",
@@ -590,8 +590,8 @@
             "} // namespace Debug"
         ]
     },
-    "prps": {
-        "prefix": "prps",
+    "reprps": {
+        "prefix": "reprps",
         "body": [
             "inline namespace IO {",
             "#define SFINAE(x, ...)\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   \\",
@@ -1055,32 +1055,6 @@
             "\tauto duration = duration_cast<milliseconds>(stop_time - start_time);\t\t\t\t\t\t\t\t\t \\",
             "\tcerr << \"[Time Taken\" << \" = \" << duration << \"]\" << endl << endl;",
             ""
-        ]
-    },
-    "linearsieve": {
-        "prefix": "linearsieve",
-        "body": [
-            "struct LinearSieve {",
-            "\tvector<int> spf = {0, 1};",
-            "\tvector<int> primes;",
-            "\tLinearSieve(int n) {",
-            "\t\tn = max(n, 1);",
-            "\t\tspf.assign(n + 1, 0);",
-            "\t\tprimes.clear();",
-            "\t\tfor (int i = 2; i <= n; i++) {",
-            "\t\t\tif (spf[i] == 0) {",
-            "\t\t\t\tspf[i] = i;",
-            "\t\t\t\tprimes.push_back(i);",
-            "\t\t\t}",
-            "\t\t\tfor (int x : primes) {",
-            "\t\t\t\tif (x > spf[i] || i * x > n) {",
-            "\t\t\t\t\tbreak;",
-            "\t\t\t\t}",
-            "\t\t\t\tspf[i * x] = x;",
-            "\t\t\t}",
-            "\t\t}",
-            "\t}",
-            "};"
         ]
     },
     "mint": {

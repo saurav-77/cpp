@@ -27,7 +27,7 @@ inline auto to_string(__uint128_t num, int base = 10) {
 }
 /* Primitive Datatypes Print */
 void print(const char *x) { writer_out << x; }
-void print(bool x) { writer_out << (x ? "T" : "F"); }
+void print(bool x) { writer_out << (x ? "True" : "False"); }
 void print(char x) { writer_out << '\'' << x << '\''; }
 void print(signed short int x) { writer_out << x; }
 void print(unsigned short int x) { writer_out << x; }
