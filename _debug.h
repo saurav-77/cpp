@@ -147,23 +147,6 @@ template <typename T, typename... V> void printer(const char *names, T &&head, V
     else
         writer_out << "]\n";
 }
-/* PrinterArr */
-void printerArr(const char *) {} /* Base Recursive */
-template <typename T, typename... V> void printerArr(const char *names, T arr[], size_t N, V... tail) {
-    size_t ind = 0;
-    for (; names[ind] and names[ind] != ','; ind++)
-        writer_out << names[ind];
-    for (ind++; names[ind] and names[ind] != ','; ind++)
-        ;
-    writer_out << " = {";
-    for (size_t i = 0; i < N; i++)
-        writer_out << (i ? "," : ""), print(arr[i]);
-    writer_out << "}";
-    if (sizeof...(tail))
-        writer_out << " ||", printerArr(names + ind + 1, tail...);
-    else
-        writer_out << "]\n";
-}
 } // namespace __DEBUG_UTIL__
 
 void err_prefix(string func, int line) {
