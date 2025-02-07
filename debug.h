@@ -7,32 +7,33 @@ string to_string(bool b) { return (b ? "true" : "false"); }
 
 std::string to_string(const char *c) { return string(c); }
 
-inline auto digit_to_char(int digit) { return static_cast<char>(digit > 9 ? 'a' + digit - 10 : '0' + digit); }
+inline char digit_to_char(int digit) { return static_cast<char>(digit + 48); }
 
 inline auto to_string(__int128_t num, int base = 10) {
     const auto neg = num < 0;
     std::string str;
-    if (neg)
-        num = -num;
-    do
-        str += digit_to_char(num % base), num /= base;
+    if (num < 1'000'000) {
+        str.push_back((-(num % 10)) + 48);
+        num /= 10;
+    }
+    if (neg) num = -num;
+    do str += digit_to_char(num % base), num /= base;
     while (num > 0);
-    if (neg)
-        str += '-';
+    if (neg) str += '-';
     std::reverse(str.begin(), str.end());
     return str;
 }
 
 inline auto to_string(__uint128_t num, int base = 10) {
     std::string str;
-    do
-        str += digit_to_char(num % base), num /= base;
+    do str += digit_to_char(num % base), num /= base;
     while (num > 0);
     std::reverse(str.begin(), str.end());
     return str;
 }
 
-template <typename T> string to_string(queue<T> q) {
+template <typename T>
+string to_string(queue<T> q) {
     bool first = true;
     string res = "{";
     while (!q.empty()) {
@@ -47,7 +48,8 @@ template <typename T> string to_string(queue<T> q) {
     return res;
 }
 
-template <typename T> string to_string(stack<T> st) {
+template <typename T>
+string to_string(stack<T> st) {
     bool first = true;
     string res = "{";
     while (!st.empty()) {
@@ -92,25 +94,30 @@ string to_string(const vector<bool> &v) {
     return res;
 }
 
-template <typename A, typename B> string to_string(const pair<A, B> &p) {
+template <typename A, typename B>
+string to_string(const pair<A, B> &p) {
     return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
 }
 
-template <typename A, typename B, typename C> string to_string(const tuple<A, B, C> &p) {
+template <typename A, typename B, typename C>
+string to_string(const tuple<A, B, C> &p) {
     return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ")";
 }
 
-template <typename A, typename B, typename C, typename D> string to_string(const tuple<A, B, C, D> &p) {
-    return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ", " +
-           to_string(get<3>(p)) + ")";
+template <typename A, typename B, typename C, typename D>
+string to_string(const tuple<A, B, C, D> &p) {
+    return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ", " + to_string(get<3>(p)) +
+           ")";
 }
 
-template <size_t N> string to_string(const bitset<N> &v) {
+template <size_t N>
+string to_string(const bitset<N> &v) {
     string res = v.to_string();
     return res;
 }
 
-template <typename A> string to_string(const A &v) {
+template <typename A>
+string to_string(const A &v) {
     bool first = true;
     string res = "{";
     for (auto &x : v) {
@@ -125,7 +132,8 @@ template <typename A> string to_string(const A &v) {
 }
 
 void debug_out() { writer_out << "\n"; }
-template <typename Head, typename... Tail> void debug_out(const Head H, const Tail &...T) {
+template <typename Head, typename... Tail>
+void debug_out(const Head H, const Tail &...T) {
     writer_out << to_string(H);
     if (sizeof...(T))
         writer_out << "] [";
@@ -141,10 +149,7 @@ void err_prefix(string func, int line) {
                << "\u001b[34m" << line << "\033[0m: ";
 }
 #ifdef CDEBUG
-#define clg(...)                                                                                             \
-    err_prefix(__FUNCTION__, __LINE__), writer_out << "[" << #__VA_ARGS__ << "] = [", debug_out(__VA_ARGS__)
+#define clg(...) err_prefix(__FUNCTION__, __LINE__), writer_out << "[" << #__VA_ARGS__ << "] = [", debug_out(__VA_ARGS__)
 #else
-#define clg(...)                                                                                             \
-    writer_out << __func__ << ":" << __LINE__ << ": " << "[" << #__VA_ARGS__ << "] = [",                     \
-        debug_out(__VA_ARGS__)
+#define clg(...) writer_out << __func__ << ":" << __LINE__ << ": " << "[" << #__VA_ARGS__ << "] = [", debug_out(__VA_ARGS__)
 #endif
