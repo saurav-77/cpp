@@ -1,13 +1,4 @@
 #define writer_out cout
-#define start                                                                                                \
-    using namespace chrono;                                                                                  \
-    auto start_time = high_resolution_clock::now();
-
-#define stop                                                                                                 \
-    auto stop_time = high_resolution_clock::now();                                                           \
-    auto duration = duration_cast<milliseconds>(stop_time - start_time);                                     \
-    writer_out << "[Time Taken" << " = " << duration << "]" << endl << endl;
-
 namespace __DEBUG_UTIL__ {
 inline auto digit_to_char(int digit) { return static_cast<char>(digit > 9 ? 'a' + digit - 10 : '0' + digit); }
 
