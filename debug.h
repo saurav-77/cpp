@@ -143,7 +143,7 @@ void debug_out(const Head H, const Tail &...T) {
 }
 
 void err_prefix(string func, int line) {
-    writer_out << "\033[0;31m\u001b[1mDEBUG\033[0m: "
+    writer_out << "\033[0;31m\u001b[1mDebug\033[0m: "
                << "\u001b[34m" << func << "\033[0m"
                << ":"
                << "\u001b[34m" << line << "\033[0m: ";
