@@ -2248,6 +2248,8 @@
             "using ish = int16_t;",
             "using ush = uint16_t;",
             "",
+            "#define len(x) (int(x.size()))",
+            "",
             "const ll MOD = 1e9 + 7;",
             "const ll OMOD = 998'244'353;",
             "",
