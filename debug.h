@@ -12,7 +12,7 @@ inline char digit_to_char(int digit) { return static_cast<char>(digit + 48); }
 inline auto to_string(__int128_t num, int base = 10) {
     const auto neg = num < 0;
     std::string str;
-    if (num < 1'000'000) {
+    if (num < -1'000'000) {
         str.push_back((-(num % 10)) + 48);
         num /= 10;
     }
