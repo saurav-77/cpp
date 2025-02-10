@@ -9,8 +9,8 @@ std::string to_string(const char *c) { return string(c); }
 
 inline char digit_to_char(int digit) { return static_cast<char>(digit + 48); }
 
-inline auto to_string(__int128_t num, int base = 10) {
-    const auto neg = num < 0;
+auto to_string(__int128_t num, int base = 10) {
+    const bool neg = num < 0;
     std::string str;
     if (num < -1'000'000) {
         str.push_back((-(num % 10)) + 48);
@@ -24,7 +24,7 @@ inline auto to_string(__int128_t num, int base = 10) {
     return str;
 }
 
-inline auto to_string(__uint128_t num, int base = 10) {
+auto to_string(__uint128_t num, int base = 10) {
     std::string str;
     do str += digit_to_char(num % base), num /= base;
     while (num > 0);
