@@ -1,5 +1,34 @@
 #define writer_out cout
 namespace __DEBUG_UTIL__ {
+    ostream &operator<<(ostream &os, __uint128_t num) {
+        std::string str;
+        do
+            str += static_cast<char>(num % 10 + 48), num /= 10;
+        while (num > 0);
+        std::reverse(str.begin(), str.end());
+        return os << str;
+    }
+
+    ostream &operator<<(ostream &os, __int128_t num) {
+        const bool neg = num < 0;
+        std::string str;
+        if (num < LONG_MIN) {
+            str.push_back((-(num % 10)) + 48);
+            num /= 10;
+        }
+        if (neg)
+            num = -num;
+        do
+            str += static_cast<char>(num % 10 + 48), num /= 10;
+        while (num > 0);
+        if (neg)
+            str += '-';
+        std::reverse(str.begin(), str.end());
+        return os << str;
+    }
+
+    void print(__int128_t x) { writer_out << x; }
+    void print(__uint128_t x) { writer_out << x; }
     /* Primitive Datatypes Print */
     void print(const char *x) { writer_out << x; }
     void print(bool x) { writer_out << (x ? "T" : "F"); }
