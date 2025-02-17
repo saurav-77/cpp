@@ -1,5 +1,8 @@
-BasedOnStyle: LLVM
-ColumnLimit: 130
+BasedOnStyle: Google
+ColumnLimit: 120
 IndentWidth: 4
-
 NamespaceIndentation: All
+
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
