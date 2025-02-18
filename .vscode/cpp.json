@@ -1571,29 +1571,6 @@
             "};"
         ]
     },
-    "ycomb": {
-        "prefix": "ycomb",
-        "body": [
-            "template <class Fun>",
-            "class y_combinator_result {",
-            "\tFun fun_;",
-            "",
-            "   public:",
-            "\ttemplate <class T>",
-            "\texplicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}",
-            "",
-            "\ttemplate <class... Args>",
-            "\tdecltype(auto) operator()(Args &&...args) {",
-            "\t\treturn fun_(std::ref(*this), std::forward<Args>(args)...);",
-            "\t}",
-            "};",
-            "",
-            "template <class Fun>",
-            "decltype(auto) y_combinator(Fun &&fun) {",
-            "\treturn y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun));",
-            "}"
-        ]
-    },
     "timer": {
         "prefix": "timer",
         "body": [
