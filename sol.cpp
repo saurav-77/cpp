@@ -1,105 +1,133 @@
-#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
 using namespace std;
 
-using uint = uint32_t;
-using ll = int64_t;
-using ull = uint64_t;
-using lll = __int128_t;
-using ulll = __uint128_t;
 
-#define len(x) (int(x.size()))
+const int N = 1e5;
+using ll = long long;
 
-const ll MOD = 1e9 + 7;
-const ll OMOD = 998'244'353;
-
-#if defined(LOCAL)
-#include "debug.h"
-#else
-#define clg(...)
-#endif
-
-template <int m> class static_modint {
-    using mint = static_modint;
-    static_assert(m > 0, "Modulus must be positive");
-
-  public:
-    static constexpr int mod() { return m; }
-
-    constexpr static_modint(long long y = 0) : x(y >= 0 ? y % m : (y % m + m) % m) {}
-
-    constexpr int val() const { return x; }
-
-    constexpr mint &operator+=(const mint &r) {
-        if ((x += r.x) >= m)
-            x -= m;
-        return *this;
+int power(long long n, long long k, const int mod) {
+    int ans = 1 % mod;
+    n %= mod;
+    if (n < 0) n += mod;
+    while (k) {
+        if (k & 1) ans = (long long)ans * n % mod;
+        n = (long long)n * n % mod;
+        k >>= 1;
     }
-    constexpr mint &operator-=(const mint &r) {
-        if ((x += m - r.x) >= m)
-            x -= m;
-        return *this;
-    }
-    constexpr mint &operator*=(const mint &r) {
-        x = static_cast<int>(1LL * x * r.x % m);
-        return *this;
-    }
-    constexpr mint &operator/=(const mint &r) { return *this *= r.inv(); }
-
-    constexpr bool operator==(const mint &r) const { return x == r.x; }
-
-    constexpr mint operator+() const { return *this; }
-    constexpr mint operator-() const { return mint(-x); }
-
-    constexpr friend mint operator+(const mint &l, const mint &r) { return mint(l) += r; }
-    constexpr friend mint operator-(const mint &l, const mint &r) { return mint(l) -= r; }
-    constexpr friend mint operator*(const mint &l, const mint &r) { return mint(l) *= r; }
-    constexpr friend mint operator/(const mint &l, const mint &r) { return mint(l) /= r; }
-
-    constexpr mint inv() const {
-        int a = x, b = m, u = 1, v = 0;
-        while (b > 0) {
-            int t = a / b;
-            std::swap(a -= t * b, b);
-            std::swap(u -= t * v, v);
-        }
-        return mint(u);
-    }
-
-    constexpr mint pow(unsigned long long n) const {
-        mint ret(1), mul(x);
-        while (n > 0) {
-            if (n & 1)
-                ret *= mul;
-            mul *= mul;
-            n >>= 1;
-        }
-        return ret;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const mint &r) { return os << r.x; }
-
-  private:
-    int x;
-};
-
-// using mint = static_modint<998'244'353>;
-using mint = static_modint<1'000'000'007>;
-
-void solve() {}
-
-int32_t main() {
-#ifdef CDEBUG
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    // freopen("error.txt", "w", stderr);
-#endif
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    int tc = 1;
-    cin >> tc;
-    for (int i = 1; i <= tc; ++i) {
-        solve();
-    }
-    return 0;
+    return ans;
 }
+ll extended_euclid(ll a, ll b, ll &x, ll &y) {
+    if (b == 0) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    ll x1, y1;
+    ll d = extended_euclid(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - y1 * (a / b);
+    return d;
+}
+ll inverse(ll a, ll m) {
+    ll x, y;
+    ll g = extended_euclid(a, m, x, y);
+    if (g != 1) return -1;
+    return (x % m + m) % m;
+}
+int factmod(ll n, int p, const int mod) {
+    vector<int> f(mod + 1);
+    f[0] = 1 % mod;
+    for (int i = 1; i <= mod; i++) {
+        if (i % p)
+            f[i] = 1LL * f[i - 1] * i % mod;
+        else
+            f[i] = f[i - 1];
+    }
+    int ans = 1 % mod;
+    while (n > 1) {
+        ans = 1LL * ans * f[n % mod] % mod;
+        ans = 1LL * ans * power(f[mod], n / mod, mod) % mod;
+        n /= p;
+    }
+    return ans;
+}
+ll multiplicity(ll n, int p) {
+    ll ans = 0;
+    while (n) {
+        n /= p;
+        ans += n;
+    }
+    return ans;
+}
+
+int ncr(ll n, ll r, int p, int k) {
+    if (n < r or r < 0) return 0;
+    int mod = 1;
+    for (int i = 0; i < k; i++) {
+        mod *= p;
+    }
+    ll t = multiplicity(n, p) - multiplicity(r, p) - multiplicity(n - r, p);
+    if (t >= k) return 0;
+    int ans =
+        1LL * factmod(n, p, mod) * inverse(factmod(r, p, mod), mod) % mod * inverse(factmod(n - r, p, mod), mod) % mod;
+    ans = 1LL * ans * power(p, t, mod) % mod;
+    return ans;
+}
+
+pair<ll, ll> CRT(ll a1, ll m1, ll a2, ll m2) {
+    ll p, q;
+    ll g = extended_euclid(m1, m2, p, q);
+    if (a1 % g != a2 % g) return make_pair(0, -1);
+    ll m = m1 / g * m2;
+    p = (p % m + m) % m;
+    q = (q % m + m) % m;
+    return make_pair((p * a2 % m * (m1 / g) % m + q * a1 % m * (m2 / g) % m) % m, m);
+}
+int spf[N];
+vector<int> primes;
+void sieve() {
+    for (int i = 2; i < N; i++) {
+        if (spf[i] == 0) spf[i] = i, primes.push_back(i);
+        int sz = primes.size();
+        for (int j = 0; j < sz && i * primes[j] < N && primes[j] <= spf[i]; j++) {
+            spf[i * primes[j]] = primes[j];
+        }
+    }
+}
+int ncr(ll n, ll r, int m) {
+    if (n < r or r < 0) return 0;
+    pair<ll, ll> ans({0, 1});
+    while (m > 1) {
+        int p = spf[m], k = 0, cur = 1;
+        while (m % p == 0) {
+            m /= p;
+            cur *= p;
+            ++k;
+        }
+        ans = CRT(ans.first, ans.second, ncr(n, r, p, k), cur);
+    }
+    return ans.first;
+}
+
+class Solution {
+   public:
+    bool hasSameDigits(string s) {
+        int n = s.size();
+        vector<int> ncr10;
+        for (int i = 0; i <= n - 2; ++i) {
+            ncr10[i] = ncr(n - 2, i, 10);
+        }
+
+        long res = 0;
+        for (int i = 0; i <= n - 2; ++i) {
+            res += (s[i] - '0') * ncr10[i];
+            res %= 10;
+        }
+        long res2 = 0;
+        for (int i = 0; i <= n - 2; ++i) {
+            res2 += (s[i + 1] - '0') * ncr10[i];
+            res2 %= 10;
+        }
+        return res2 == res;
+    }
+};
