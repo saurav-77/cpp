@@ -13,3 +13,20 @@ __builtin_ffs(x) // 1 + index of least significant 1 (unsgined int; 0 if x = 0)
 __builtin_ffsll(x) // 1 + index of least significant 1 (unsgined long long; 0 if x = 0)
 __lg(x) // index of highest set bit (unsigned int or unsigned long long; undefined if x = 0)
 __builtin_parity(x) // gives true for odd and false for even
+
+// functions of std::bitset
+bitset<SZ> bit;
+	bit.all(); //checks whether all bits are set or not
+	bit.any(); //checks whether >= 1 bit is on
+	bit.none(); //checks if all bits are off
+	bit.count(); //counts no of set bits
+	bit.flip(); //flips all bits
+	bit.flip(1); //flips 1st bit
+	bit.reset(); //resets all bits to 0
+	bit.reset(1); //resets 1st bit
+	bit.set(); //sets all bits to 1
+	bit.set(1); //sets 1st bit to 1
+	bit.size(); //return size of bitset
+	bit.test(1); //check if 1st bit is on or not
+    bit.to_ullong() // convert to long long
+	cout << bit.to_string(); //converts to string
