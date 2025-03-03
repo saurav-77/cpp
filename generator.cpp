@@ -11,14 +11,20 @@ using ulll = __uint128_t;
 const ll MOD = 1e9 + 7;
 const ll OMOD = 998'244'353;
 
-template <typename T = long long> constexpr T INF = numeric_limits<T>::max();
+template <typename T = long long>
+constexpr T INF = numeric_limits<T>::max();
 
 // Utility types
-template <typename T = long long> using Pair = pair<T, T>;
+template <typename T = long long>
+using Pair = pair<T, T>;
 
 // Configuration enums for readability
-enum class CaseType { Lower, Upper, Mixed };
-enum class Order { None, Increasing, Decreasing };
+enum class CaseType { Lower,
+                      Upper,
+                      Mixed };
+enum class Order { None,
+                   Increasing,
+                   Decreasing };
 
 // Some utility macros
 #define all(v) v.begin(), v.end()
@@ -32,10 +38,12 @@ mt19937_64 rng(accuracy);
 inline namespace test_case_generator {
 
     // Generate a random integer of type T between `l` and `r`
-    template <typename T = long long> T gen_num(T l = -INF<T>, T r = INF<T>) { return uniform_int_distribution<T>(l, r)(rng); }
+    template <typename T = long long>
+    T gen_num(T l = -INF<T>, T r = INF<T>) { return uniform_int_distribution<T>(l, r)(rng); }
 
     // Generate a random string of length `len` with specified case type
-    template <typename T = long long> string gen_string(int len = 0, CaseType caseType = CaseType::Lower, T l = 1, T r = 26) {
+    template <typename T = long long>
+    string gen_string(int len = 0, CaseType caseType = CaseType::Lower, T l = 1, T r = 26) {
         assert(len >= 0 && len <= 5e6);
         string str(len, caseType == CaseType::Upper ? 'A' : 'a');
         for (char &ch : str) {
@@ -113,7 +121,8 @@ inline namespace test_case_generator {
         return base + gen_num<T>(l - base, r - base);
     }
 
-    template <typename T = long long> vector<string> gen_char_grid(int rows, int cols, char l = 'a', char r = 'z') {
+    template <typename T = long long>
+    vector<string> gen_char_grid(int rows, int cols, char l = 'a', char r = 'z') {
         assert(rows > 0 && cols > 0);
         vector<string> grid(rows, string(cols, ' '));
         for (auto &row : grid)
@@ -123,7 +132,8 @@ inline namespace test_case_generator {
     }
 
     // Generate a permutation of numbers from 1 to `len`
-    template <typename T = long long> vector<T> gen_permutation(int len = 0) {
+    template <typename T = long long>
+    vector<T> gen_permutation(int len = 0) {
         assert(len >= 0 && len <= 5e6);
         vector<T> perm(len);
         iota(perm.begin(), perm.end(), 1);
@@ -132,7 +142,8 @@ inline namespace test_case_generator {
     }
 
     // Generate a large integer as a string of length `len`
-    template <typename T = long long> string gen_big_int(int len = 0, char l = '0', char r = '9') {
+    template <typename T = long long>
+    string gen_big_int(int len = 0, char l = '0', char r = '9') {
         assert(len >= 0 && len <= 5e6);
         string str(len, '0');
         for (char &ch : str)
@@ -155,7 +166,8 @@ inline namespace test_case_generator {
     }
 
     // Generate a tree structure as an array of pairs
-    template <typename T = long long> vector<Pair<T>> gen_tree(int n = 0) {
+    template <typename T = long long>
+    vector<Pair<T>> gen_tree(int n = 0) {
         assert(n >= 0);
         vector<Pair<T>> edges(n > 1 ? n - 1 : 0);
         vector<int> perm(n + 1);
@@ -170,7 +182,8 @@ inline namespace test_case_generator {
         return edges;
     }
 
-    template <typename T = long long> vector<Pair<T>> gen_chain_tree(int n) {
+    template <typename T = long long>
+    vector<Pair<T>> gen_chain_tree(int n) {
         assert(n > 0);
         vector<Pair<T>> edges;
         for (int i = 2; i <= n; ++i) {
@@ -181,7 +194,8 @@ inline namespace test_case_generator {
     }
 
     // Generate a simple connected graph with `n` nodes and `m` edges
-    template <typename T = long long> vector<Pair<T>> gen_simple_graph(int n = 0, int m = 0) {
+    template <typename T = long long>
+    vector<Pair<T>> gen_simple_graph(int n = 0, int m = 0) {
         assert(n > 0 && m >= n - 1 && m <= n * (n - 1) / 2);
         vector<Pair<T>> edges = gen_tree<T>(n);
         set<Pair<T>> edge_set(edges.begin(), edges.end());
@@ -220,7 +234,8 @@ inline namespace test_case_generator {
         return edges;
     }
 
-    template <typename T = long long> vector<T> gen_subset(T n, int subsetSize) {
+    template <typename T = long long>
+    vector<T> gen_subset(T n, int subsetSize) {
         assert(n >= subsetSize && subsetSize >= 0);
         vector<T> subset;
         set<T> unique_elements;
@@ -231,7 +246,8 @@ inline namespace test_case_generator {
         return vector<T>(unique_elements.begin(), unique_elements.end());
     }
 
-    template <typename T = long long> vector<Pair<T>> gen_binary_tree(int n) {
+    template <typename T = long long>
+    vector<Pair<T>> gen_binary_tree(int n) {
         assert(n > 0);
         vector<Pair<T>> edges;
         for (int i = 2; i <= n; ++i) {
@@ -242,7 +258,8 @@ inline namespace test_case_generator {
         return edges;
     }
 
-    template <typename T = long long> vector<Pair<T>> gen_connected_graph(int n, int m) {
+    template <typename T = long long>
+    vector<Pair<T>> gen_connected_graph(int n, int m) {
         assert(n > 0 && m >= n - 1 && m <= n * (n - 1) / 2);
         vector<Pair<T>> edges = gen_tree<T>(n);
         set<Pair<T>> edge_set(edges.begin(), edges.end());
@@ -274,7 +291,8 @@ inline namespace test_case_generator {
         return weighted_edges;
     }
 
-    template <typename T = long long> vector<Pair<T>> gen_unique_pairs(int n, int pairCount) {
+    template <typename T = long long>
+    vector<Pair<T>> gen_unique_pairs(int n, int pairCount) {
         assert(pairCount <= n * (n - 1) / 2);
         set<Pair<T>> unique_pairs;
 
@@ -300,7 +318,8 @@ inline namespace test_case_generator {
         return substrings;
     }
 
-    template <typename T = long long> vector<T> gen_divisors(T n) {
+    template <typename T = long long>
+    vector<T> gen_divisors(T n) {
         vector<T> divisors;
         for (T i = 1; i * i <= n; ++i) {
             if (n % i == 0) {
@@ -312,7 +331,8 @@ inline namespace test_case_generator {
         return divisors;
     }
 
-    template <typename T = long long> vector<T> gen_prime_factors(T n) {
+    template <typename T = long long>
+    vector<T> gen_prime_factors(T n) {
         vector<T> factors;
         for (T i = 2; i * i <= n; ++i) {
             while (n % i == 0) {
@@ -325,7 +345,8 @@ inline namespace test_case_generator {
         return factors;
     }
 
-    template <typename T = long long> vector<T> gen_prime_numbers(T n) {
+    template <typename T = long long>
+    vector<T> gen_prime_numbers(T n) {
         vector<T> primes;
         vector<bool> is_prime(n + 1, true);
         is_prime[0] = is_prime[1] = false;
@@ -341,7 +362,8 @@ inline namespace test_case_generator {
         return primes;
     }
 
-    template <typename T = long long> vector<T> partition(T sum, T parts, T minRange = 1, T maxRange = INF<T>) {
+    template <typename T = long long>
+    vector<T> partition(T sum, T parts, T minRange = 1, T maxRange = INF<T>) {
         assert(sum >= parts * minRange && sum <= parts * maxRange);
         vector<T> partition;
         for (T i = 1; i < parts; ++i) {
@@ -353,107 +375,92 @@ inline namespace test_case_generator {
         return partition;
     }
 } // namespace test_case_generator
-inline namespace IO {
-#define SFINAE(x, ...)                                                                                                           \
-    template <class, class = void> struct x : std::false_type {};                                                                \
-    template <class T> struct x<T, std::void_t<__VA_ARGS__>> : std::true_type {}
 
-    SFINAE(DefaultI, decltype(std::cin >> std::declval<T &>()));
+inline namespace Print {
+#define SFINAE(x, ...)             \
+    template <class, class = void> \
+    struct x : std::false_type {}; \
+    template <class T>             \
+    struct x<T, std::void_t<__VA_ARGS__>> : std::true_type {}
+
+    ostream &operator<<(ostream &os, const __uint128_t &x) {
+        constexpr uint64_t d19 = 10'000'000'000'000'000'000U;
+        if (x > d19) {
+            os << uint64_t(x / d19) << setfill('0') << setw(19) << uint64_t(x % d19);
+        } else {
+            os << uint64_t(x);
+        }
+        return os;
+    }
+    ostream &operator<<(ostream &os, const __int128_t &x) {
+        if (x >= 0) {
+            os << __uint128_t(x);
+        } else {
+            os << '-' << __uint128_t(-x);
+        }
+        return os;
+    }
+
     SFINAE(DefaultO, decltype(std::cout << std::declval<T &>()));
     SFINAE(IsTuple, typename std::tuple_size<T>::type);
     SFINAE(Iterable, decltype(std::begin(std::declval<T>())));
 
-    template <auto &is> struct Reader {
-        template <class T> void Impl(T &t) {
-            if constexpr (DefaultI<T>::value)
-                is >> t;
-            else if constexpr (Iterable<T>::value) {
-                for (auto &x : t)
-                    Impl(x);
-            } else if constexpr (IsTuple<T>::value) {
-                std::apply([this](auto &...args) { (Impl(args), ...); }, t);
-            } else
-                static_assert(IsTuple<T>::value, "No matching type for read");
-        }
-        template <class... Ts> void read(Ts &...ts) { ((Impl(ts)), ...); }
-    };
-
-    template <class... Ts> void re(Ts &...ts) { Reader<cin>{}.read(ts...); }
-
-    template <auto &os, bool debug, bool print_nd> struct Writer {
-        string comma() const { return debug ? "," : ""; }
-        template <class T> constexpr char Space(const T &) const {
+    template <auto &os, bool print_nd>
+    struct Writer {
+        template <class T>
+        constexpr char Space(const T &) const {
             return print_nd && (Iterable<T>::value or IsTuple<T>::value) ? '\n' : ' ';
         }
-        template <class T> void Impl(T const &t) const {
+        template <class T>
+        void Impl(T const &t) const {
             if constexpr (DefaultO<T>::value)
                 os << t;
             else if constexpr (Iterable<T>::value) {
-                if (debug)
-                    os << '{';
                 int i = 0;
                 for (auto &&x : t)
-                    ((i++) ? (os << comma() << Space(x), Impl(x)) : Impl(x));
-                if (debug)
-                    os << '}';
+                    ((i++) ? (os << Space(x), Impl(x)) : Impl(x));
             } else if constexpr (IsTuple<T>::value) {
-                if (debug)
-                    os << '(';
                 std::apply(
                     [this](auto const &...args) {
                         int i = 0;
-                        (((i++) ? (os << comma() << " ", Impl(args)) : Impl(args)), ...);
+                        (((i++) ? (os << " ", Impl(args)) : Impl(args)), ...);
                     },
                     t);
-                if (debug)
-                    os << ')';
             } else
                 static_assert(IsTuple<T>::value, "No matching type for print");
         }
-        template <class T> void ImplWrapper(T const &t) const {
-            if (debug)
-                os << "\033[0;31m";
+        template <class T>
+        void ImplWrapper(T const &t) const {
             Impl(t);
-            if (debug)
-                os << "\033[0m";
         }
-        template <class... Ts> void print(Ts const &...ts) const { ((Impl(ts)), ...); }
-        template <class F, class... Ts> void print_with_sep(const std::string &sep, F const &f, Ts const &...ts) const {
+        template <class... Ts>
+        void print(Ts const &...ts) const {
+            ((Impl(ts)), ...);
+        }
+        template <class F, class... Ts>
+        void print_with_sep(const std::string &sep, F const &f, Ts const &...ts) const {
             ImplWrapper(f), ((os << sep, ImplWrapper(ts)), ...), os << '\n';
         }
         void print_with_sep(const std::string &) const { os << '\n'; }
     };
 
-    template <class... Ts> void pr(Ts const &...ts) { Writer<cout, false, true>{}.print(ts...); }
-    template <class... Ts> void ps(Ts const &...ts) { Writer<cout, false, true>{}.print_with_sep(" ", ts...); }
-} // namespace IO
-
-inline namespace Debug {
-    template <typename... Args> void err(Args... args) { Writer<cerr, true, false>{}.print_with_sep(" | ", args...); }
-    template <typename... Args> void errn(Args... args) { Writer<cerr, true, true>{}.print_with_sep(" | ", args...); }
-
-    void err_prefix(string func, int line, string args) {
-        cerr << "\033[0;31m\u001b[1mDEBUG\033[0m"
-             << " | "
-             << "\u001b[34m" << func << "\033[0m"
-             << ":"
-             << "\u001b[34m" << line << "\033[0m"
-             << " - "
-             << "[" << args << "] = ";
+    template <class... Ts>
+    void pr(Ts const &...ts) {
+        Writer<cout, true>{}.print(ts...);
     }
+    template <class... Ts>
+    void ps(Ts const &...ts) {
+        Writer<cout, true>{}.print_with_sep(" ", ts...);
+    }
+} // namespace Print
 
-#ifdef CDEBUG
-#define clg(args...) err_prefix(__FUNCTION__, __LINE__, #args), err(args)
-#else
-#define clg(...)
-#endif
-} // namespace Debug
-void gen_test() {}
+void gen_test() {
+}
 
 int32_t main() {
     freopen("input.txt", "w", stdout);
     int tc = 1;
-    // cout << tc << endl;
+    cout << tc << endl;
     for (int i = 1; i <= tc; ++i) {
         gen_test();
     }
