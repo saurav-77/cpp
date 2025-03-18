@@ -2,7 +2,7 @@
 using namespace std;
 
 class BookMyShow {
-   public:
+  public:
     vector<pair<long, long>> g;
     vector<pair<long, long>> t_g;
     vector<long> s;
@@ -18,7 +18,7 @@ class BookMyShow {
         this->m = m;
         g.assign(n, {m, 0});
         t_g.assign(4 * n, {m, 0});
-        [&](this auto self, int ind, int l, int r) {
+        auto build = [&](this auto self, int ind, int l, int r) {
             if (l == r) {
                 return;
             }
@@ -26,10 +26,11 @@ class BookMyShow {
             self(2 * ind + 1, l, mid);
             self(2 * ind + 2, mid + 1, r);
             t_g[ind] = {m, 0};
-        }(0, 0, n - 1);
+        };
+        build(0, 0, n - 1);
         s.assign(n, m);
         t_s.assign(4 * n, m);
-        [&](this auto self, int ind, int l, int r) {
+        auto bb = [&](this auto self, int ind, int l, int r) {
             if (l == r) {
                 t_s[ind] = m;
                 return;
@@ -40,11 +41,12 @@ class BookMyShow {
             int left = 2 * ind + 1;
             int right = 2 * ind + 2;
             t_s[ind] = t_s[left] + t_s[right];
-        }(0, 0, n - 1);
+        };
+        bb(0, 0, n - 1);
     }
 
     vector<int> gather(int k, int maxRow) {
-        auto search = [&](this auto self, int ind, int l, int r, int k, int& resind) -> pair<long, long> {
+        auto search = [&](this auto self, int ind, int l, int r, int k, int &resind) -> pair<long, long> {
             if (t_g[ind].first >= k) {
                 if (l == r) {
                     resind = l;
