@@ -1053,8 +1053,8 @@
             "}"
         ]
     },
-    "lazy_segment_tree_with_add_set_query_with_vector_constructor": {
-        "prefix": "lazy_segment_tree_with_add_set_query_with_vector_constructor",
+    "lazy_segment_tree_for_addition_only": {
+        "prefix": "lazy_segment_tree_for_addition_only",
         "body": [
             "enum QueryType { ADD,",
             "\t\t\t\t SET,",
@@ -1148,7 +1148,7 @@
         "prefix": "diff_array",
         "body": [
             "template <typename T>",
-            "class LazySegtree {",
+            "class diff_array {",
             "  private:",
             "\tconst int sz;",
             "\tvector<T> tree;",
@@ -1194,7 +1194,7 @@
             "\t}",
             "",
             "  public:",
-            "\tLazySegtree(int n) : sz(n), tree(4 * n), lazy(4 * n) {}",
+            "\tdiff_array(int n) : sz(n), tree(4 * n), lazy(4 * n) {}",
             "",
             "\tvoid range_add(int ql, int qr, int add) { range_add(1, 0, sz - 1, ql, qr, add); }",
             "",
