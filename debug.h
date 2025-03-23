@@ -16,17 +16,21 @@ auto to_string(__int128_t num, int base = 10) {
         str.push_back((-(num % 10)) + 48);
         num /= 10;
     }
-    if (neg) num = -num;
-    do str += digit_to_char(num % base), num /= base;
+    if (neg)
+        num = -num;
+    do
+        str += digit_to_char(num % base), num /= base;
     while (num > 0);
-    if (neg) str += '-';
+    if (neg)
+        str += '-';
     std::reverse(str.begin(), str.end());
     return str;
 }
 
 auto to_string(__uint128_t num, int base = 10) {
     std::string str;
-    do str += digit_to_char(num % base), num /= base;
+    do
+        str += digit_to_char(num % base), num /= base;
     while (num > 0);
     std::reverse(str.begin(), str.end());
     return str;
@@ -99,15 +103,15 @@ string to_string(const pair<A, B> &p) {
     return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
 }
 
-template <typename A, typename B, typename C>
-string to_string(const tuple<A, B, C> &p) {
-    return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ")";
-}
-
-template <typename A, typename B, typename C, typename D>
-string to_string(const tuple<A, B, C, D> &p) {
-    return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ", " + to_string(get<3>(p)) +
-           ")";
+template <class... Ts>
+std::string to_string(const std::tuple<Ts...> &t) {
+    std::string s = "(";
+    [&]<std::size_t... I>(std::index_sequence<I...>) {
+        ((s += to_string(std::get<I>(t)) + ((I < sizeof...(Ts) - 1) ? ", " : "")),
+         ...);
+    }(std::make_index_sequence<sizeof...(Ts)>());
+    s += ")";
+    return s;
 }
 
 template <size_t N>

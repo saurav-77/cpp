@@ -3997,12 +3997,84 @@
             "}"
         ]
     },
-    "floor_ceil_integer_div": {
-        "prefix": "floor_ceil_integer_div",
+    "floor_ceil_division": {
+        "prefix": "floor_ceil_division",
         "body": [
-            "int64_t floor_div(int64_t a, int64_t b) { return a / b - ((a ^ b) < 0 && a % b != 0); }",
+            "template <class T>",
+            "T floor_div(T x, T y) {",
+            "\tauto d = x / y;",
+            "\tauto r = x % y;",
+            "\tif (r == 0)",
+            "\t\treturn d;",
+            "\tif ((r > 0) == (y > 0))",
+            "\t\treturn d;",
+            "\treturn d - 1;",
+            "}",
+            "template <class T>",
+            "T ceil_div(T x, T y) {",
+            "\tauto d = x / y;",
+            "\tauto r = x % y;",
+            "\tif (r == 0)",
+            "\t\treturn d;",
+            "\tif ((r > 0) == (y > 0))",
+            "\t\treturn d + 1;",
+            "\treturn d;",
+            "}"
+        ]
+    },
+    "gcd_lcm_for_128bit_integer": {
+        "prefix": "gcd_lcm_for_128bit_integer",
+        "body": [
+            "inline int countr_zero(unsigned __int128 x) {",
+            "\tauto lo = (unsigned long long)(x);",
+            "\tauto hi = (unsigned long long)(x >> 64);",
+            "\treturn lo ? std::countr_zero(lo) : 64 + std::countr_zero(hi);",
+            "}",
             "",
-            "int64_t ceil_div(int64_t a, int64_t b) { return a / b + ((a ^ b) > 0 && a % b != 0); }"
+            "inline __int128_t abs(__int128_t x) { return x < 0 ? -x : x; }",
+            "",
+            "inline __uint128_t gcd(__uint128_t a, __uint128_t b) {",
+            "\tif (a == 0)",
+            "\t\treturn b;",
+            "\tif (b == 0)",
+            "\t\treturn a;",
+            "\tint shift;",
+            "\t{",
+            "\t\tint a_bsf = countr_zero(a);",
+            "\t\ta >>= a_bsf;",
+            "\t\tint b_bsf = countr_zero(b);",
+            "\t\tb >>= b_bsf;",
+            "\t\tshift = std::min(a_bsf, b_bsf);",
+            "\t}",
+            "\twhile (a != b) {",
+            "\t\tif (a > b)",
+            "\t\t\tstd::swap(a, b);",
+            "\t\tb -= a;",
+            "\t\tb >>= countr_zero(b);",
+            "\t}",
+            "\treturn (a << shift);",
+            "}",
+            "inline __int128_t gcd(__int128_t a, __int128_t b) { return gcd((__uint128_t)abs(a), (__uint128_t)abs(b)); }",
+            "inline __uint128_t lcm(__uint128_t a, __uint128_t b) { return a / gcd(a, b) * b; }",
+            "inline __int128_t lcm(__int128_t a, __int128_t b) { return a / gcd(a, b) * b; }"
+        ]
+    },
+    "modpow": {
+        "prefix": "modpow",
+        "body": [
+            "inline constexpr uint64_t pow_mod_u64(uint64_t x, uint64_t n, uint64_t m) {",
+            "\tif (m == 1)",
+            "\t\treturn 0;",
+            "\tuint64_t r = 1;",
+            "\tuint64_t y = x % m;",
+            "\twhile (n) {",
+            "\t\tif (n & 1)",
+            "\t\t\tr = (uint64_t)((__uint128_t)(1) * r * y % m);",
+            "\t\ty = (uint64_t)((__uint128_t)(1) * y * y % m);",
+            "\t\tn >>= 1;",
+            "\t}",
+            "\treturn r;",
+            "}"
         ]
     },
     "miller_rabin": {
@@ -4151,24 +4223,6 @@
             "using template_heap = priority_queue<T, Sequence, Compare>;",
             "template <typename T> using max_heap = template_heap<T>;",
             "template <typename T> using min_heap = template_heap<T, vector<T>, greater<T>>;"
-        ]
-    },
-    "modpow": {
-        "prefix": "modpow",
-        "body": [
-            "int64_t modpow(int64_t a, int64_t b, int64_t mod) {",
-            "\tint64_t res = 1;",
-            "\twhile (b > 0) {",
-            "\t\tif (b & 1) {",
-            "\t\t\tres = res * a;",
-            "\t\t\tres %= mod;",
-            "\t\t}",
-            "\t\ta *= a;",
-            "\t\ta %= mod;",
-            "\t\tb >>= 1;",
-            "\t}",
-            "\treturn res;",
-            "}"
         ]
     },
     "pfactor": {
