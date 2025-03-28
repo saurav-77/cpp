@@ -1,6 +1,6 @@
 // #define cerr cout
-namespace __DEBUG_UTIL__ {
-    using namespace std;
+
+namespace debug_printer {
     template <typename T>
     concept is_iterable =
         requires(T &&x) { begin(x); } && !is_same_v<remove_cvref_t<T>, string>;
@@ -25,9 +25,7 @@ namespace __DEBUG_UTIL__ {
         }
     }
     void print(string x) { cerr << "\"" << x << "\""; }
-    void print(vector<bool> &v) { /* Overloaded this because stl optimizes
-                                     vector<bool> by using _Bit_reference
-                                     instead of bool to conserve space. */
+    void print(vector<bool> &v) {
         int f = 0;
         cerr << '{';
         for (auto &&i : v) cerr << (f++ ? "," : "") << (i ? "True" : "False");
@@ -36,24 +34,20 @@ namespace __DEBUG_UTIL__ {
     template <typename T>
     void print(T &&x) {
         if constexpr (is_iterable<T>)
-            if (size(x) && is_iterable<decltype(*(
-                               begin(x)))>) { /* Iterable inside Iterable */
+            if (size(x) && is_iterable<decltype(*(begin(x)))>) {
                 int f = 0;
                 cerr << "\n~~~~~\n";
                 for (auto &&i : x) {
                     cerr << setw(2) << left << f++, print(i), cerr << "\n";
                 }
                 cerr << "~~~~~\n";
-            } else { /* Normal Iterable */
+            } else {
                 int f = 0;
                 cerr << "{";
                 for (auto &&i : x) cerr << (f++ ? "," : ""), print(i);
                 cerr << "}";
             }
-        else if constexpr (requires {
-                               x.pop();
-                           }) /* Stacks, Priority Queues, Queues */
-        {
+        else if constexpr (requires { x.pop(); }) {
             auto temp = x;
             int f = 0;
             cerr << "{";
@@ -67,12 +61,10 @@ namespace __DEBUG_UTIL__ {
         } else if constexpr (requires {
                                  x.first;
                                  x.second;
-                             }) /* Pair */
-        {
+                             }) {
             cerr << '(', print(x.first), cerr << ',', print(x.second),
                 cerr << ')';
-        } else if constexpr (requires { get<0>(x); }) /* Tuple */
-        {
+        } else if constexpr (requires { get<0>(x); }) {
             int f = 0;
             cerr << '(', apply(
                              [&f](auto... args) {
@@ -100,20 +92,20 @@ namespace __DEBUG_UTIL__ {
             cerr << "]\n";
     }
 
-}  // namespace __DEBUG_UTIL__
+}  // namespace debug_printer
 void err_prefix(string func, int line) {
     std::cerr << "\033[0;31m\u001b[1mDEBUG\033[0m: "
-               << "\u001b[34m" << func << "\033[0m"
-               << ":"
-               << "\u001b[34m" << line << "\033[0m: [";
+              << "\u001b[34m" << func << "\033[0m"
+              << ":"
+              << "\u001b[34m" << line << "\033[0m: [";
 }
 
 #ifdef CDEBUG
 #define clg(...)                        \
     err_prefix(__FUNCTION__, __LINE__), \
-        __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
+        debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
 #else
 #define clg(...)                                        \
     writer_out << __func__ << ":" << __LINE__ << ": [", \
-        __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
+        debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
 #endif
