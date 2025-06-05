@@ -2,16 +2,14 @@
 
 namespace debug_printer {
     template <typename T>
-    concept is_iterable =
-        requires(T &&x) { begin(x); } && !is_same_v<remove_cvref_t<T>, string>;
+    concept is_iterable = requires(T &&x) { begin(x); } && !is_same_v<remove_cvref_t<T>, string>;
     void print(const char *x) { cerr << x; }
     void print(char x) { cerr << "\'" << x << "\'"; }
     void print(bool x) { cerr << (x ? "True" : "False"); }
     void print(const __uint128_t x) {
         constexpr uint64_t d19 = 10'000'000'000'000'000'000U;
         if (x > d19) {
-            cerr << uint64_t(x / d19) << setfill('0') << setw(19)
-                 << uint64_t(x % d19);
+            cerr << uint64_t(x / d19) << setfill('0') << setw(19) << uint64_t(x % d19);
         } else {
             cerr << uint64_t(x);
         }
@@ -52,25 +50,18 @@ namespace debug_printer {
             int f = 0;
             cerr << "{";
             if constexpr (requires { x.top(); })
-                while (!temp.empty())
-                    cerr << (f++ ? "," : ""), print(temp.top()), temp.pop();
+                while (!temp.empty()) cerr << (f++ ? "," : ""), print(temp.top()), temp.pop();
             else
-                while (!temp.empty())
-                    cerr << (f++ ? "," : ""), print(temp.front()), temp.pop();
+                while (!temp.empty()) cerr << (f++ ? "," : ""), print(temp.front()), temp.pop();
             cerr << "}";
         } else if constexpr (requires {
                                  x.first;
                                  x.second;
                              }) {
-            cerr << '(', print(x.first), cerr << ',', print(x.second),
-                cerr << ')';
+            cerr << '(', print(x.first), cerr << ',', print(x.second), cerr << ')';
         } else if constexpr (requires { get<0>(x); }) {
             int f = 0;
-            cerr << '(', apply(
-                             [&f](auto... args) {
-                                 ((cerr << (f++ ? "," : ""), print(args)), ...);
-                             },
-                             x);
+            cerr << '(', apply([&f](auto... args) { ((cerr << (f++ ? "," : ""), print(args)), ...); }, x);
             cerr << ')';
         } else
             cerr << x;
@@ -78,8 +69,7 @@ namespace debug_printer {
     template <typename T, typename... V>
     void printer(const char *names, T &&head, V &&...tail) {
         int i = 0;
-        for (size_t bracket = 0;
-             names[i] != '\0' and (names[i] != ',' or bracket != 0); i++)
+        for (size_t bracket = 0; names[i] != '\0' and (names[i] != ',' or bracket != 0); i++)
             if (names[i] == '(' or names[i] == '<' or names[i] == '{')
                 bracket++;
             else if (names[i] == ')' or names[i] == '>' or names[i] == '}')
@@ -101,11 +91,7 @@ void err_prefix(string func, int line) {
 }
 
 #ifdef CDEBUG
-#define clg(...)                        \
-    err_prefix(__FUNCTION__, __LINE__), \
-        debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
+#define clg(...) err_prefix(__FUNCTION__, __LINE__), debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
 #else
-#define clg(...)                                        \
-    writer_out << __func__ << ":" << __LINE__ << ": [", \
-        debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
+#define clg(...) writer_out << __func__ << ":" << __LINE__ << ": [", debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
 #endif
