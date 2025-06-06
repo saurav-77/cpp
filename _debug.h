@@ -1,70 +1,70 @@
-// #define cerr cout
+#define writer_out cerr
 
 namespace debug_printer {
     template <typename T>
     concept is_iterable = requires(T &&x) { begin(x); } && !is_same_v<remove_cvref_t<T>, string>;
-    void print(const char *x) { cerr << x; }
-    void print(char x) { cerr << "\'" << x << "\'"; }
-    void print(bool x) { cerr << (x ? "True" : "False"); }
+    void print(const char *x) { writer_out << x; }
+    void print(char x) { writer_out << "\'" << x << "\'"; }
+    void print(bool x) { writer_out << (x ? "True" : "False"); }
     void print(const __uint128_t x) {
         constexpr uint64_t d19 = 10'000'000'000'000'000'000U;
         if (x > d19) {
-            cerr << uint64_t(x / d19) << setfill('0') << setw(19) << uint64_t(x % d19);
+            writer_out << uint64_t(x / d19) << setfill('0') << setw(19) << uint64_t(x % d19);
         } else {
-            cerr << uint64_t(x);
+            writer_out << uint64_t(x);
         }
     }
     void print(const __int128_t x) {
         if (x >= 0) {
             print(__uint128_t(x));
         } else {
-            cerr << '-';
+            writer_out << '-';
             print(__uint128_t(-x));
         }
     }
-    void print(string x) { cerr << "\"" << x << "\""; }
+    void print(string x) { writer_out << "\"" << x << "\""; }
     void print(vector<bool> &v) {
         int f = 0;
-        cerr << '{';
-        for (auto &&i : v) cerr << (f++ ? "," : "") << (i ? "True" : "False");
-        cerr << "}";
+        writer_out << '{';
+        for (auto &&i : v) writer_out << (f++ ? "," : "") << (i ? "True" : "False");
+        writer_out << "}";
     }
     template <typename T>
     void print(T &&x) {
         if constexpr (is_iterable<T>)
             if (size(x) && is_iterable<decltype(*(begin(x)))>) {
                 int f = 0;
-                cerr << "\n~~~~~\n";
+                writer_out << "\n~~~~~\n";
                 for (auto &&i : x) {
-                    cerr << setw(2) << left << f++, print(i), cerr << "\n";
+                    writer_out << setw(2) << left << f++, print(i), writer_out << "\n";
                 }
-                cerr << "~~~~~\n";
+                writer_out << "~~~~~\n";
             } else {
                 int f = 0;
-                cerr << "{";
-                for (auto &&i : x) cerr << (f++ ? "," : ""), print(i);
-                cerr << "}";
+                writer_out << "{";
+                for (auto &&i : x) writer_out << (f++ ? "," : ""), print(i);
+                writer_out << "}";
             }
         else if constexpr (requires { x.pop(); }) {
             auto temp = x;
             int f = 0;
-            cerr << "{";
+            writer_out << "{";
             if constexpr (requires { x.top(); })
-                while (!temp.empty()) cerr << (f++ ? "," : ""), print(temp.top()), temp.pop();
+                while (!temp.empty()) writer_out << (f++ ? "," : ""), print(temp.top()), temp.pop();
             else
-                while (!temp.empty()) cerr << (f++ ? "," : ""), print(temp.front()), temp.pop();
-            cerr << "}";
+                while (!temp.empty()) writer_out << (f++ ? "," : ""), print(temp.front()), temp.pop();
+            writer_out << "}";
         } else if constexpr (requires {
                                  x.first;
                                  x.second;
                              }) {
-            cerr << '(', print(x.first), cerr << ',', print(x.second), cerr << ')';
+            writer_out << '(', print(x.first), writer_out << ',', print(x.second), writer_out << ')';
         } else if constexpr (requires { get<0>(x); }) {
             int f = 0;
-            cerr << '(', apply([&f](auto... args) { ((cerr << (f++ ? "," : ""), print(args)), ...); }, x);
-            cerr << ')';
+            writer_out << '(', apply([&f](auto... args) { ((writer_out << (f++ ? "," : ""), print(args)), ...); }, x);
+            writer_out << ')';
         } else
-            cerr << x;
+            writer_out << x;
     }
     template <typename T, typename... V>
     void printer(const char *names, T &&head, V &&...tail) {
@@ -74,20 +74,20 @@ namespace debug_printer {
                 bracket++;
             else if (names[i] == ')' or names[i] == '>' or names[i] == '}')
                 bracket--;
-        cerr.write(names, i) << " = ";
+        writer_out.write(names, i) << " = ";
         print(head);
         if constexpr (sizeof...(tail))
-            cerr << " ||", printer(names + i + 1, tail...);
+            writer_out << " ||", printer(names + i + 1, tail...);
         else
-            cerr << "]\n";
+            writer_out << "]\n";
     }
 
 }  // namespace debug_printer
 void err_prefix(string func, int line) {
-    std::cerr << "\033[0;31m\u001b[1mDEBUG\033[0m: "
-              << "\u001b[34m" << func << "\033[0m"
-              << ":"
-              << "\u001b[34m" << line << "\033[0m: [";
+    std::writer_out << "\033[0;31m\u001b[1mDEBUG\033[0m: "
+                    << "\u001b[34m" << func << "\033[0m"
+                    << ":"
+                    << "\u001b[34m" << line << "\033[0m: [";
 }
 
 #ifdef CDEBUG
