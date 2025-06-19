@@ -4831,6 +4831,40 @@
             ""
         ]
     },
+    "inc__debug": {
+        "prefix": "inc__debug",
+        "body": [
+            "#if defined(LOCAL)",
+            "#include \"__debug.h\"",
+            "#else",
+            "#define clg(...)",
+            "#endif"
+        ]
+    },
+    "main_single_test": {
+        "prefix": "main_single_test",
+        "body": [
+            "#include <bits/stdc++.h>",
+            "using namespace std;",
+            "",
+            "using ll = long long;",
+            "using ld = long double;",
+            "using lll = __int128_t;",
+            "",
+            "void solve() {",
+            "\t$0",
+            "}",
+            "",
+            "int main() {",
+            "\tint tc = 1;",
+            "\t// cin >> tc;",
+            "\tfor (int i = 1; i <= tc; ++i) {",
+            "\t\tsolve();",
+            "\t}",
+            "\treturn 0;",
+            "}"
+        ]
+    },
     "fastio": {
         "prefix": "fastio",
         "body": [
