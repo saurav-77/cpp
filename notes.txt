@@ -11,7 +11,7 @@ __builtin_clz(x) // # of leading zeros (unsgined int; undefined if x = 0)
 __builtin_clzll(x) // # of leading zeros (unsgined long long; undefined if x = 0)
 __builtin_ffs(x) // 1 + index of least significant 1 (unsgined int; 0 if x = 0)
 __builtin_ffsll(x) // 1 + index of least significant 1 (unsgined long long; 0 if x = 0)
-__lg(x) // index of highest set bit (unsigned int or unsigned long long; undefined if x = 0)
+__lg(x) // index of highest set bit (unsigned int or unsigned long long; undefined if x = 0) // same as  bit_width(x)-1
 __builtin_parity(x) // gives true for odd and false for even
 
 // functions of std::bitset

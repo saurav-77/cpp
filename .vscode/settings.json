@@ -21,5 +21,6 @@
     ],
     "[cpp]": {
         "editor.links": false
-    }
+    },
+    "editor.fontSize": 20
 }
