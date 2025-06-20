@@ -4799,17 +4799,17 @@
             "};"
         ]
     },
-    "s_table": {
-        "prefix": "s_table",
+    "sparse": {
+        "prefix": "sparse",
         "body": [
             "template <typename T, typename F>",
-            "class s_table {",
+            "class sparse {",
             "   public:",
             "\tint n;",
             "\tvector<vector<T>> mat;",
             "\tF func;",
             "",
-            "\ts_table(const vector<T> &a, const F &f) : func(f) {",
+            "\tsparse(const vector<T> &a, const F &f) : func(f) {",
             "\t\tn = static_cast<int>(a.size());",
             "\t\tint max_log = 32 - __builtin_clz(n);",
             "\t\tmat.resize(max_log);",
@@ -4841,30 +4841,6 @@
             "#endif"
         ]
     },
-    "main_single_test": {
-        "prefix": "main_single_test",
-        "body": [
-            "#include <bits/stdc++.h>",
-            "using namespace std;",
-            "",
-            "using ll = long long;",
-            "using ld = long double;",
-            "using lll = __int128_t;",
-            "",
-            "void solve() {",
-            "\t$0",
-            "}",
-            "",
-            "int main() {",
-            "\tint tc = 1;",
-            "\t// cin >> tc;",
-            "\tfor (int i = 1; i <= tc; ++i) {",
-            "\t\tsolve();",
-            "\t}",
-            "\treturn 0;",
-            "}"
-        ]
-    },
     "fastio": {
         "prefix": "fastio",
         "body": [
@@ -4878,9 +4854,17 @@
             "#include <bits/stdc++.h>",
             "using namespace std;",
             "",
-            "using ll = long long;",
-            "using ld = long double;",
+            "using uint = uint32_t;",
+            "using ll = int64_t;",
+            "using ull = uint64_t;",
             "using lll = __int128_t;",
+            "using ulll = __uint128_t;",
+            "",
+            "#if defined(LOCAL)",
+            "#include \"__debug.h\"",
+            "#else",
+            "#define clg(...)",
+            "#endif",
             "",
             "void solve() {",
             "\t$0",
