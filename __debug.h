@@ -6,17 +6,15 @@ namespace debug_io {
     struct x<T, std::void_t<__VA_ARGS__>> : std::true_type {}
 
     ostream &operator<<(ostream &os, __uint128_t x) {
-        if (x == 0) return os << 0;
-        char buf[40];
-        int i = 0;
-        while (x) buf[i++] = '0' + x % 10, x /= 10;
-        while (i--) os << buf[i];
+        char buffer[41], *d = std::end(buffer);
+        do *--d = '0' + (x % 10), x /= 10;
+        while (x);
+        os.rdbuf()->sputn(d, std::end(buffer) - d);
         return os;
     }
-
     ostream &operator<<(ostream &os, __int128_t x) {
         if (x < 0) os << '-';
-        return os << __uint128_t(-x);
+        return os << (__uint128_t(x < 0 ? -x : x));
     }
 
     __uint128_t _stou128(const std::string &s) {
