@@ -1,3 +1,4 @@
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -5,6 +6,9 @@ using ll = int64_t;
 using ull = uint64_t;
 using lll = __int128_t;
 using ulll = __uint128_t;
+
+const ll MOD = 1e9 + 7;
+const ll OMOD = 998'244'353;
 
 #if defined(LOCAL)
 #include "__debug.h"

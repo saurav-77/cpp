@@ -5,22 +5,18 @@ namespace debug_io {
     template <class T>             \
     struct x<T, std::void_t<__VA_ARGS__>> : std::true_type {}
 
-    ostream &operator<<(ostream &os, const __uint128_t &x) {
-        constexpr uint64_t d19 = 10'000'000'000'000'000'000U;
-        if (x > d19) {
-            os << uint64_t(x / d19) << setfill('0') << setw(19) << uint64_t(x % d19);
-        } else {
-            os << uint64_t(x);
-        }
+    ostream &operator<<(ostream &os, __uint128_t x) {
+        if (x == 0) return os << 0;
+        char buf[40];
+        int i = 0;
+        while (x) buf[i++] = '0' + x % 10, x /= 10;
+        while (i--) os << buf[i];
         return os;
     }
-    ostream &operator<<(ostream &os, const __int128_t &x) {
-        if (x >= 0) {
-            os << __uint128_t(x);
-        } else {
-            os << '-' << __uint128_t(-x);
-        }
-        return os;
+
+    ostream &operator<<(ostream &os, __int128_t x) {
+        if (x < 0) os << '-';
+        return os << __uint128_t(-x);
     }
 
     __uint128_t _stou128(const std::string &s) {
@@ -95,7 +91,11 @@ namespace debug {
              << ": "
              << "[" << args << "] = ";
     }
-    void err_prefix2(string func, int line, string args) { cerr << func << ":" << line << "[" << args << "] = "; }
+    void err_prefix2(string func, int line, string args) {
+        cout << "DEBUG"
+             << " | " << func << ":" << line << ": "
+             << "[" << args << "] = ";
+    }
 }  // namespace debug
 
 #ifdef CDEBUG

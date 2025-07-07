@@ -30,3 +30,7 @@ bitset<SZ> bit;
 	bit.test(1); //check if 1st bit is on or not
     bit.to_ullong() // convert to long long
 	cout << bit.to_string(); //converts to string
+
+
+
+** Signed-to-unsigned conversion keeps the bit pattern
