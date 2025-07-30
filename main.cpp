@@ -3,8 +3,8 @@ using namespace std;
 
 using ll = int64_t;
 using ull = uint64_t;
-using xll = __int128_t;
-using xull = __uint128_t;
+using llx = __int128_t;
+using ullx = __uint128_t;
 
 #if defined(LOCAL)
 #include "__debug.h"
