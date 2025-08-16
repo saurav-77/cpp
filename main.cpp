@@ -13,7 +13,8 @@ using ullx = __uint128_t;
 #endif
 
 void solve() {
-    
+    clg("hello world");
+    clg("hi");
 }
 
 int32_t main() {

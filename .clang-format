@@ -1,4 +1,4 @@
 BasedOnStyle: Google
 IndentWidth: 4
 NamespaceIndentation: All
-ColumnLimit: 1000
+ColumnLimit: 0

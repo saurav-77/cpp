@@ -90,14 +90,14 @@ namespace debug {
              << "[" << args << "] = ";
     }
     void err_prefix2(string func, int line, string args) {
-        cout << "DEBUG"
+        cerr << "DEBUG"
              << " | " << func << ":" << line << ": "
              << "[" << args << "] = ";
     }
 }  // namespace debug
 
 #ifdef CDEBUG
-#define clg(args...) debug::err_prefix(__FUNCTION__, __LINE__, #args), debug::err(args)
+#define clg(args...) debug::err_prefix2(__FUNCTION__, __LINE__, #args), debug::err(args)
 #else
 #define clg(args...) debug::err_prefix2(__FUNCTION__, __LINE__, #args), debug::err(args)
 #endif
