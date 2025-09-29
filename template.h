@@ -123,9 +123,9 @@ inline namespace Debug {
     }
 
     void err_prefix(string func, int line, string args) {
-        cerr << "[DEBUG]"
+        cerr << "[DEBUG"
              << " "
-             << "[" << func << ""
+             << "" << func << ""
              << ":"
              << "" << line << "]"
              << " "
