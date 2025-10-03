@@ -79,7 +79,7 @@ namespace debug_printer {
         if constexpr (sizeof...(tail))
             writer_out << " ||", printer(names + i + 1, tail...);
         else
-            writer_out << "]\n";
+            writer_out << "\n";
     }
 
 }  // namespace debug_printer
@@ -93,5 +93,5 @@ void err_prefix(string func, int line) {
 #ifdef CDEBUG
 #define clg(...) err_prefix(__FUNCTION__, __LINE__), debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
 #else
-#define clg(...) writer_out << __func__ << ":" << __LINE__ << ": [", debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
+#define clg(...) writer_out << "[DEBUG " << __func__ << ":" << __LINE__ << "] ", debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
 #endif

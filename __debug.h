@@ -1,5 +1,5 @@
 namespace debug_io {
-#define S99(x, ...)                \
+#define SFINAE(x, ...)             \
     template <class, class = void> \
     struct x : std::false_type {}; \
     template <class T>             \
@@ -25,9 +25,9 @@ namespace debug_io {
     }
     __int128_t _stoi128(const std::string &s) { return (s[0] == '-' ? -1 : +1) * _stou128(s); }
 
-    S99(DefaultO, decltype(std::cout << std::declval<T &>()));
-    S99(IsTuple, typename std::tuple_size<T>::type);
-    S99(Iterable, decltype(std::begin(std::declval<T>())));
+    SFINAE(DefaultO, decltype(std::cout << std::declval<T &>()));
+    SFINAE(IsTuple, typename std::tuple_size<T>::type);
+    SFINAE(Iterable, decltype(std::begin(std::declval<T>())));
 
     template <auto &os, bool debug, bool print_nd>
     struct Writer {
@@ -90,8 +90,8 @@ namespace debug {
              << "[" << args << "] = ";
     }
     void err_prefix2(string func, int line, string args) {
-        cerr << "DEBUG"
-             << " | " << func << ":" << line << ": "
+        cerr << "[DEBUG "
+             << "" << func << ":" << line << "] "
              << "[" << args << "] = ";
     }
 }  // namespace debug
