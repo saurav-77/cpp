@@ -82,8 +82,8 @@ inline namespace Debug {
 
     void err_prefix(string func, int line, string args) {
         cout << "[DEBUG]"
-             << ":\n"
-             << func << ":" << line << ": "
+             << ": "
+             << func << ":" << line << ":\n"
              << "[" << args << "] = ";
     }
 }  // namespace Debug
