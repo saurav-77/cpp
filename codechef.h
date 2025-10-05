@@ -153,7 +153,7 @@ inline namespace Debug {
              << "[" << args << "] = ";
     }
 
-#ifndef SAURAV
+#ifndef LOCAL
 #define clg(args...) err_prefix(__FUNCTION__, __LINE__, #args), err(args)
 #define clgn(args...) err_prefix(__FUNCTION__, __LINE__, #args), errn(args)
 #else
