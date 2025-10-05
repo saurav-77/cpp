@@ -28,6 +28,27 @@ inline namespace IO {
         return os << (__uint128_t(x < 0 ? -x : x));
     }
 
+    __uint128_t _stou128(const std::string &s) {
+        __uint128_t ret = 0;
+        for (char c : s)
+            if ('0' <= c and c <= '9') ret = 10 * ret + c - '0';
+        return ret;
+    }
+    __int128_t _stoi128(const std::string &s) { return (s[0] == '-' ? -1 : +1) * _stou128(s); }
+
+    istream &operator>>(istream &in, __uint128_t &v) {
+        string s;
+        in >> s;
+        v = _stou128(s);
+        return in;
+    }
+    istream &operator>>(istream &in, __int128_t &v) {
+        string s;
+        in >> s;
+        v = _stoi128(s);
+        return in;
+    }
+
     SFINAE(DefaultI, decltype(std::cin >> std::declval<T &>()));
     SFINAE(DefaultO, decltype(std::cout << std::declval<T &>()));
     SFINAE(IsTuple, typename std::tuple_size<T>::type);
@@ -142,7 +163,6 @@ inline namespace Debug {
 }  // namespace Debug
 
 void solve() {
-    
 }
 
 int32_t main() {
