@@ -84,7 +84,7 @@ namespace debug_printer {
 
 }  // namespace debug_printer
 void err_prefix(string func, int line) {
-    std::writer_out << "[DEBUG]: "
+    std::writer_out << "DEBUG: "
                     << "" << func << ""
                     << ":"
                     << "" << line << ":\n";
