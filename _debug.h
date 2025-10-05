@@ -84,14 +84,14 @@ namespace debug_printer {
 
 }  // namespace debug_printer
 void err_prefix(string func, int line) {
-    std::writer_out << "\033[0;31m\u001b[1mDEBUG\033[0m: "
-                    << "\u001b[34m" << func << "\033[0m"
+    std::writer_out << "[DEBUG]: "
+                    << "" << func << ""
                     << ":"
-                    << "\u001b[34m" << line << "\033[0m: ";
+                    << "" << line << ":\n";
 }
 
-#ifdef CDEBUG
+#ifdef LOCAL
 #define clg(...) err_prefix(__FUNCTION__, __LINE__), debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
 #else
-#define clg(...) writer_out << "[DEBUG " << __func__ << ":" << __LINE__ << "] ", debug_printer::printer(#__VA_ARGS__, __VA_ARGS__)
+#define clg(...)
 #endif

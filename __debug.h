@@ -81,23 +81,18 @@ namespace debug {
     }
 
     void err_prefix(string func, int line, string args) {
-        cerr << "\033[0;31m\u001b[1mDEBUG\033[0m"
-             << " | "
-             << "\u001b[34m" << func << "\033[0m"
+        cerr << "[DEBUG]:"
+             << " "
+             << "" << func << ""
              << ":"
-             << "\u001b[34m" << line << "\033[0m"
-             << ": "
-             << "[" << args << "] = ";
-    }
-    void err_prefix2(string func, int line, string args) {
-        cerr << "[DEBUG "
-             << "" << func << ":" << line << "] "
+             << "" << line << ""
+             << ":\n"
              << "[" << args << "] = ";
     }
 }  // namespace debug
 
-#ifdef CDEBUG
-#define clg(args...) debug::err_prefix2(__FUNCTION__, __LINE__, #args), debug::err(args)
+#ifdef LOCAL
+#define clg(args...) debug::err_prefix(__FUNCTION__, __LINE__, #args), debug::err(args)
 #else
-#define clg(args...) debug::err_prefix2(__FUNCTION__, __LINE__, #args), debug::err(args)
+#define clg(args...)
 #endif
