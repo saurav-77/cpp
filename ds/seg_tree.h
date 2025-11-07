@@ -1,11 +1,18 @@
-template <typename tree_type, typename F>
+template <typename tree_type>
 class seg_tree {
+   public:
     vector<tree_type> tree;
-    F op;
     tree_type identity;
     int n;
+
+    // merge function
+    tree_type op(tree_type x, true_type y) {
+        return x + y;
+    }
+
+
     template <typename given_type>
-    void build(int id, int l, int r, vector<given_type> &given) {
+    void build(int id, int l, int r, vector<given_type>& given) {
         if (l == r) {
             tree[id] = given[l];
             return;
@@ -74,12 +81,15 @@ class seg_tree {
         return get(rc, mid + 1, r, ind);
     }
 
-   public:
     template <typename given_type>
-    seg_tree(vector<given_type> &g, F operation, tree_type identity_element) : op(operation), identity(identity_element) {
+    seg_tree(vector<given_type>& g, tree_type identity_element) : identity(identity_element) {
         this->n = g.size();
         tree.resize(4 * n);
         build(1, 0, n - 1, g);
+    }
+
+    seg_tree() {
+
     }
     // [l, r] 0-indexed
     tree_type query(int ql, int qr) {
