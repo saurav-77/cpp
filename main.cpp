@@ -10,10 +10,10 @@ const ll MOD = 1e9 + 7;
 const ll OMOD = 998244353;
 
 inline namespace IO {
-#define SFINAE(x, ...)			 \
+#define SFINAE(x, ...)             \
     template <class, class = void> \
     struct x : std::false_type {}; \
-    template <class T>			 \
+    template <class T>             \
     struct x<T, std::void_t<__VA_ARGS__>> : std::true_type {}
 
     ostream &operator<<(ostream &os, __uint128_t x) {
@@ -25,10 +25,7 @@ inline namespace IO {
     }
     ostream &operator<<(ostream &os, __int128_t x) {
         ullx ans = x;
-        if (x < 0) {
-            os << '-';
-            ans = -ullx(x);
-        }
+        if (x < 0) os << '-', ans = -ullx(x);
         return os << ans;
     }
 
@@ -167,7 +164,7 @@ inline namespace Debug {
 }  // namespace Debug
 
 void solve() {
-    llx y = -3;
+    llx y = numeric_limits<llx>::max();
     ps(y);
 }
 
