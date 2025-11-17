@@ -167,7 +167,8 @@ inline namespace Debug {
 }  // namespace Debug
 
 void solve() {
-    
+    llx y = -3;
+    ps(y);
 }
 
 int32_t main() {

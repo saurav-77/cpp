@@ -27,8 +27,12 @@ inline namespace IO {
         return os;
     }
     ostream &operator<<(ostream &os, __int128_t x) {
-        if (x < 0) os << '-';
-        return os << (__uint128_t(x < 0 ? -x : x));
+        ullx ans = x;
+        if (x < 0) {
+            os << '-';
+            ans = -ullx(x);
+        }
+        return os << ans;
     }
 
     SFINAE(DefaultO, decltype(std::cout << std::declval<T &>()));
