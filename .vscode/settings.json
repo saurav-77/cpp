@@ -1,7 +1,7 @@
 {
     "code-runner.clearPreviousOutput": true,
     "code-runner.executorMap": {
-        "cpp": "cd $dir && g++ -std=c++23 -DLOCAL -DCDEBUG -fsanitize=undefined -fsanitize=address -Wall -Wextra -Wshadow $fileName -o exe/$fileNameWithoutExt && $direxe/$fileNameWithoutExt",
+        "cpp": "cd $dir && g++ -std=c++23 -DLOCAL -fsanitize=undefined -fsanitize=address -Wall -Wextra -Wshadow $fileName -o exe/$fileNameWithoutExt && $direxe/$fileNameWithoutExt",
     },
     "vim.incsearch": true,
     "vim.useSystemClipboard": true,
