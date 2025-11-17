@@ -27,11 +27,8 @@ inline namespace IO {
         return os;
     }
     ostream &operator<<(ostream &os, __int128_t x) {
-        ullx ans = x;
-        if (x < 0) {
-            os << '-';
-            ans = -ullx(x);
-        }
+        __uint128_t ans = x;
+        if (x < 0) os << '-', ans = -ans;
         return os << ans;
     }
 

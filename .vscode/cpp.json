@@ -28,11 +28,8 @@
             "\t\treturn os;",
             "\t}",
             "\tostream &operator<<(ostream &os, __int128_t x) {",
-            "\t\tullx ans = x;",
-            "\t\tif (x < 0) {",
-            "\t\t\tos << '-';",
-            "\t\t\tans = -ullx(x);",
-            "\t\t}",
+            "\t\t__uint128_t ans = x;",
+            "\t\tif (x < 0) os << '-', ans = -ans;",
             "\t\treturn os << ans;",
             "\t}",
             "",
@@ -637,4 +634,4 @@
             "}"
         ]
     }
-}
+}W
