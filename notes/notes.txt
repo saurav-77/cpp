@@ -34,3 +34,28 @@ bitset<SZ> bit;
 
 
 ** Signed-to-unsigned conversion keeps the bit pattern
+
+
+ll tonelli_shanks(ll x, ll p) 
+  // Outputs a y such that (y^2)%p=x, or -1 if it doesn't exist
+
+
+-----------
+for same bits:
+N = no of bits
+unsgined arithmetic are alays under modulo 2^N:
+(a - b)  ≡  (a + 2^N - b)  mod 2^N
+
+from signed to unsigned
+unsigned = signed % 2^N
+if singed is negative
+unsgined = signed + 2^N;
+
+from unsigned to signed
+When converting an unsigned value to a signed type of the same bit-width:
+If the unsigned value fits in signed range → stays same.
+If it does NOT fit → result is implementation-defined (NOT guaranteed).
+
+------------------------
+
+

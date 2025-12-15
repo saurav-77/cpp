@@ -28,5 +28,8 @@
     },
     "editor.fontSize": 20,
     "vim.vimrc.enable": false,
-    "vim.vimrc.path": "/mnt/c/Users/saurav/.vimrc"
+    "vim.vimrc.path": "/mnt/c/Users/saurav/.vimrc",
+    "vim.handleKeys": {
+        "<C-d>": false
+    }
 }
